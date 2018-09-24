@@ -11,6 +11,6 @@ export default class ExampleBridgeView extends Component {
   }
 }
 
-ExampleBridgeView.propTypes = {
-  exampleProp: React.PropTypes.string
-}
+// ExampleBridgeView.propTypes = {
+//   exampleProp: React.PropTypes.string
+// }
