@@ -15,16 +15,26 @@
 @implementation ExampleBridge : UIView  {
 
   RCTEventDispatcher *_eventDispatcher;
-  
+  UIView *childView;
 }
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
   if ((self = [super init])) {
     _eventDispatcher = eventDispatcher;
+    childView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    childView.backgroundColor = [UIColor blueColor];
+    
   }
     
   return self;
+}
+-(void)layoutSubviews
+{
+  [super layoutSubviews];
+  childView.frame = self.bounds;
+  [self addSubview:childView];
+  
 }
 
 @end
