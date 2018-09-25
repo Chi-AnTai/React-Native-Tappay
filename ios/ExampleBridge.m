@@ -16,16 +16,23 @@
 
   RCTEventDispatcher *_eventDispatcher;
   UIView *childView;
+
 }
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher
 {
   if ((self = [super init])) {
     _eventDispatcher = eventDispatcher;
-    childView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
-    childView.backgroundColor = [UIColor blueColor];
-    
+    childView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 100)];
+    self.tpdForm = [TPDForm setupWithContainer:childView];
+    self.tpdCard = [TPDCard setup:(self.tpdForm)];
   }
+  [self.tpdForm onFormUpdated:^(TPDStatus * _Nonnull status) {
+    self.cardIsValidate = [status isCanGetPrime];
+    NSLog(@"on Form Update");
+    NSLog(self.cardIsValidate ? @"Yes" : @"No");
+
+  }];
     
   return self;
 }

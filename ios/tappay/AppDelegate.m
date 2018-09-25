@@ -9,7 +9,8 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
+#import <AdSupport/ASIdentifierManager.h>
+#import <TPDirect/TPDirect.h>
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -29,6 +30,10 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [TPDSetup setWithAppId:00 withAppKey:@"yourkey" withServerType:TPDServer_SandBox];
+  [[TPDSetup shareInstance] setupIDFA:[[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString]];
+  
+  [[TPDSetup shareInstance] serverSync];
   return YES;
 }
 

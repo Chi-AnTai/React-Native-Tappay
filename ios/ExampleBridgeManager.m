@@ -12,7 +12,10 @@
 #else
 #import “React/RCTBridge.h” // Required when used as a Pod in a Swift project
 #endif
+@interface ExampleBridgeManager ()
+@property (strong, nonatomic) ExampleBridge *tappayView;
 
+@end
 @implementation ExampleBridgeManager
 
 @synthesize bridge = _bridge;
@@ -24,7 +27,37 @@ RCT_EXPORT_MODULE();
 // Return the native view that represents your React component
 - (UIView *)view
 {
-  return [[ExampleBridge alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
+  return self.tappayView;
+}
+
+- (instancetype)init {
+  if (self = [super init]) {
+    // Initialize self
+  }
+  self.tappayView = [[ExampleBridge alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
+  return self;
+}
+
+RCT_REMAP_METHOD(getPrime,
+                 findEventsWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+  if(self.tappayView.cardIsValidate) {
+    [[[self.tappayView.tpdCard onSuccessCallback:^(NSString * _Nullable prime, TPDCardInfo * _Nullable cardInfo) {
+      NSLog(@"ios get prime");
+      
+      resolve(prime);
+    }] onFailureCallback:^(NSInteger status, NSString * _Nonnull message) {
+      NSLog(@"ios fail");
+      
+      NSError *error = nil;
+      reject(@"code", message, error);
+      
+    }] getPrime];
+  } else {
+    NSError *error = nil;
+    reject(@"no_events", @"card is not validate", error);
+  }
 }
 
 RCT_EXPORT_VIEW_PROPERTY(exampleProp, NSString)
